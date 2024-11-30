@@ -208,7 +208,7 @@ var
   CNPJ, URL: string;
 begin
 
-  // Configura√ß√£o inicial da ProgressBar
+  // ConfiguraÁ„o inicial da ProgressBar
   ProgressBar1.Position := 0;
   ProgressBar1.Visible := True;
   ProgressBar1.BringToFront;
@@ -223,7 +223,7 @@ begin
     ProgressBar1.Position := 20;
     //Application.ProcessMessages;
 
-    // Faz a requisi√ß√£o GET na URL da API
+    // Faz a requisiÁ„o GET na URL da API
     Response := NetHTTPClient1.Get(URL);
 
     ProgressBar1.Position := 60;
@@ -247,7 +247,7 @@ begin
         ProgressBar1.State := pbsError;
         ProgressBar1.Position := 100;
         //Application.ProcessMessages;
-        ShowMessage('Erro: Resposta JSON inv√°lida');
+        ShowMessage('Erro: Resposta JSON inv·lida');
         Exit;
       end;
 
@@ -275,7 +275,7 @@ begin
 
   // Oculta a ProgressBar ao finalizar
   ProgressBar1.Visible := False;
-
+  ProgressBar1.State := pbsNormal;
   ProgressBar1.Position := 0;
   //Application.ProcessMessages;
 
@@ -286,7 +286,7 @@ var
   CNPJ: string;
   I: Integer;
 begin
-  // Remove caracteres n√£o num√©ricos
+  // Remove caracteres n„o numÈricos
   CNPJ := '';
   for I := 1 to Length(TEdit(Sender).Text) do
   begin
