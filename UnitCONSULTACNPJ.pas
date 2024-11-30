@@ -275,6 +275,7 @@ begin
 
   // Oculta a ProgressBar ao finalizar
   ProgressBar1.Visible := False;
+  ProgressBar1.State := pbsNormal;
   ProgressBar1.Position := 0;
   //Application.ProcessMessages;
 
