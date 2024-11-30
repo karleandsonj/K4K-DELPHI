@@ -275,6 +275,7 @@ begin
 
   // Oculta a ProgressBar ao finalizar
   ProgressBar1.Visible := False;
+  //ProgressBar1.State := pbsNormal;
   ProgressBar1.Position := 0;
   //Application.ProcessMessages;
 
@@ -283,13 +284,15 @@ end;
 procedure TConsultaCNPJ.edt_CNPJ1Change(Sender: TObject);
 var
   CNPJ: string;
+  I: Integer;
 begin
   // Remove caracteres não numéricos
-  CNPJ := TEdit(Sender).Text;
-  CNPJ := StringReplace(CNPJ, '.', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, '-', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, '/', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, ' ', '', [rfReplaceAll]);
+  CNPJ := '';
+  for I := 1 to Length(TEdit(Sender).Text) do
+  begin
+    if TEdit(Sender).Text[I] in ['0'..'9'] then
+      CNPJ := CNPJ + TEdit(Sender).Text[I];
+  end;
 
   // Atualiza o Edit com o CNPJ limpo sem reposicionar o cursor
   TEdit(Sender).Text := CNPJ;
@@ -297,6 +300,7 @@ begin
   // Move o cursor para o final do texto para evitar pular caracteres
   TEdit(Sender).SelStart := Length(CNPJ);
 end;
+
 
 procedure TConsultaCNPJ.ImageMouseEnter(Sender: TObject);
 begin

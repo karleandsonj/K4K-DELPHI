@@ -256,7 +256,6 @@ begin
     begin
       ProgressBar1.State := pbsError;
       ProgressBar1.Position := 100;
-      //Application.ProcessMessages;
       ShowMessage('Erro ao consultar CNPJ: ' + CNPJ);
       edt_CNPJ1.SetFocus;
 
@@ -266,7 +265,6 @@ begin
     begin
       ProgressBar1.State := pbsError;
       ProgressBar1.Position := 100;
-      //Application.ProcessMessages;
       ShowMessage('Erro: ' + E.Message);
       edt_CNPJ1.SetFocus;
 
@@ -275,9 +273,8 @@ begin
 
   // Oculta a ProgressBar ao finalizar
   ProgressBar1.Visible := False;
-  //ProgressBar1.State := pbsNormal;
+  ProgressBar1.State := pbsNormal;
   ProgressBar1.Position := 0;
-  //Application.ProcessMessages;
 
 end;
 
