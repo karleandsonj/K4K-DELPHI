@@ -1,0 +1,130 @@
+unit UnitConsultarInterno_CNPJ;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.JSON, REST.Types, System.Net.HttpClient, System.Net.URLClient,
+  System.Net.HttpClientComponent, Vcl.ExtCtrls;
+
+type
+  TConsultaCNPJ_INTERNO = class(TForm)
+    Memo1: TMemo;
+    NetHTTPClient1: TNetHTTPClient;
+    edt_CNPJ: TEdit;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    edt_checar: TEdit;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ConsultaCNPJ_INTERNO: TConsultaCNPJ_INTERNO;
+
+implementation
+
+{$R *.dfm}
+
+uses UnitCONSULTACNPJ;
+
+procedure TConsultaCNPJ_INTERNO.FormCreate(Sender: TObject);
+var
+  Response: IHTTPResponse;
+  JSONObj: TJSONObject;
+  CNPJ, URL: string;
+  TIPO: string;
+  TIPO1: string;
+begin
+  edt_CNPJ.text := ConsultaCNPJ.edt_CNPJ1.text;
+  CNPJ := edt_CNPJ.text; // Substitua pelo CNPJ desejado
+  URL := 'https://brasilapi.com.br/api/cnpj/v1/' + CNPJ;
+
+  try
+    // Faz a requisição GET na URL da API
+    Response := NetHTTPClient1.Get(URL);
+
+    // Verifica se a resposta foi bem-sucedida
+    if Response.StatusCode = 200 then
+    begin
+      JSONObj := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+      // Verifica se o JSON foi parseado corretamente
+      if JSONObj = nil then
+      begin
+        ShowMessage('Erro: Resposta JSON inválida');
+        Exit;
+      end;
+
+      TIPO := (JSONObj.GetValue<string>('opcao_pelo_simples', 'Não disponível'));
+        if TIPO = 'true' then
+        begin
+          TIPO1 := 'SIMPLES';
+        end;
+        if TIPO = 'false' then
+        begin
+          TIPO1 := 'C/ CORRENTE'
+        end;
+
+      try
+
+
+        // Exibe os dados obtidos no Memo
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add('Informações:');
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' CNPJ: ' + JSONObj.GetValue<string>('cnpj', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Nome: ' + JSONObj.GetValue<string>('razao_social', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Fantasia: ' + JSONObj.GetValue<string>('nome_fantasia', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Telefone: ' + JSONObj.GetValue<string>('ddd_telefone_1', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Data de Abertura: ' + JSONObj.GetValue<string>('data_inicio_atividade', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' SITUAÇÃO: ' + JSONObj.GetValue<string>('descricao_situacao_cadastral', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Identificador: ' + JSONObj.GetValue<string>('descricao_identificador_matriz_filial', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Tipo empresa: ' + (TIPO));
+        Memo1.Lines.Add('----------------------------------------------------------');
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add('Endereço:');
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Cidade: ' + JSONObj.GetValue<string>('municipio', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Estado: ' + JSONObj.GetValue<string>('uf', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Codigo do municipio: ' + JSONObj.GetValue<string>('codigo_municipio', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Logradouro: ' + JSONObj.GetValue<string>('logradouro', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Bairro: ' + JSONObj.GetValue<string>('bairro', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Complemento: ' + JSONObj.GetValue<string>('complemento', 'Não disponível'));
+        Memo1.Lines.Add('');
+        Memo1.Lines.Add(' Numero: ' + JSONObj.GetValue<string>('numero', 'Não disponível'));
+
+
+        edt_checar.text := (' CNPJ: ' + JSONObj.GetValue<string>('cnpj', 'Não disponível'));
+      finally
+        JSONObj.Free;
+      end;
+    end
+    else
+    begin
+      ShowMessage('Erro ao consultar CNPJ: ' + Response.StatusText);
+    end;
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Erro: ' + E.Message);
+    end;
+  end;
+end;
+
+end.

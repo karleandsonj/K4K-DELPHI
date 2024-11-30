@@ -1,0 +1,36 @@
+unit UnitSGA;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.DBCGrids;
+
+type
+  TFormSGA = class(TForm)
+    DBCtrlGrid1: TDBCtrlGrid;
+    ID: TDBText;
+    ERRORESUMIDO: TDBText;
+    procedure IDClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSGA: TFormSGA;
+
+implementation
+
+{$R *.dfm}
+
+uses UnitCONSULTA;
+
+
+procedure TFormSGA.IDClick(Sender: TObject);
+begin
+   FormCONSULTA.Show;
+end;
+
+end.
