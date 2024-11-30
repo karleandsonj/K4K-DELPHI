@@ -211,7 +211,8 @@ begin
   // Configuração inicial da ProgressBar
   ProgressBar1.Position := 0;
   ProgressBar1.Visible := True;
-  Application.ProcessMessages;
+  ProgressBar1.BringToFront;
+  //Application.ProcessMessages;
 
 
   //edt_CNPJ.text := ConsultaCNPJ.edt_CNPJ1.text;
@@ -220,19 +221,19 @@ begin
 
   try
     ProgressBar1.Position := 20;
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
 
     // Faz a requisição GET na URL da API
     Response := NetHTTPClient1.Get(URL);
 
     ProgressBar1.Position := 60;
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
 
     // Verifica se a resposta foi bem-sucedida
     if Response.StatusCode = 200 then
     begin
       ProgressBar1.Position := 100;
-      Application.ProcessMessages;
+      //Application.ProcessMessages;
       JSONObj := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
 
       ConsultaCNPJ_INTERNO := TConsultaCNPJ_INTERNO.Create(self);
@@ -243,8 +244,9 @@ begin
       // Verifica se o JSON foi parseado corretamente
       if JSONObj = nil then
       begin
+        ProgressBar1.State := pbsError;
         ProgressBar1.Position := 100;
-        Application.ProcessMessages;
+        //Application.ProcessMessages;
         ShowMessage('Erro: Resposta JSON inválida');
         Exit;
       end;
@@ -252,8 +254,9 @@ begin
     end
     else
     begin
+      ProgressBar1.State := pbsError;
       ProgressBar1.Position := 100;
-      Application.ProcessMessages;
+      //Application.ProcessMessages;
       ShowMessage('Erro ao consultar CNPJ: ' + CNPJ);
       edt_CNPJ1.SetFocus;
 
@@ -261,8 +264,9 @@ begin
   except
     on E: Exception do
     begin
+      ProgressBar1.State := pbsError;
       ProgressBar1.Position := 100;
-      Application.ProcessMessages;
+      //Application.ProcessMessages;
       ShowMessage('Erro: ' + E.Message);
       edt_CNPJ1.SetFocus;
 
@@ -271,21 +275,24 @@ begin
 
   // Oculta a ProgressBar ao finalizar
   ProgressBar1.Visible := False;
+  ProgressBar1.State := pbsNormal;
   ProgressBar1.Position := 0;
-  Application.ProcessMessages;
+  //Application.ProcessMessages;
 
 end;
 
 procedure TConsultaCNPJ.edt_CNPJ1Change(Sender: TObject);
 var
   CNPJ: string;
+  I: Integer;
 begin
   // Remove caracteres não numéricos
-  CNPJ := TEdit(Sender).Text;
-  CNPJ := StringReplace(CNPJ, '.', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, '-', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, '/', '', [rfReplaceAll]);
-  CNPJ := StringReplace(CNPJ, ' ', '', [rfReplaceAll]);
+  CNPJ := '';
+  for I := 1 to Length(TEdit(Sender).Text) do
+  begin
+    if TEdit(Sender).Text[I] in ['0'..'9'] then
+      CNPJ := CNPJ + TEdit(Sender).Text[I];
+  end;
 
   // Atualiza o Edit com o CNPJ limpo sem reposicionar o cursor
   TEdit(Sender).Text := CNPJ;
@@ -293,6 +300,7 @@ begin
   // Move o cursor para o final do texto para evitar pular caracteres
   TEdit(Sender).SelStart := Length(CNPJ);
 end;
+
 
 procedure TConsultaCNPJ.ImageMouseEnter(Sender: TObject);
 begin
