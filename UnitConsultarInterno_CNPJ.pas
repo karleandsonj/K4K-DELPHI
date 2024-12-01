@@ -15,6 +15,10 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     procedure FormCreate(Sender: TObject);
+    procedure Memo1Enter(Sender: TObject);
+    procedure Memo1Exit(Sender: TObject);
+    procedure Memo1KeyPress(Sender: TObject; var Key: Char);
+    procedure Memo1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -121,6 +125,27 @@ begin
       ShowMessage('Erro: ' + E.Message);
     end;
   end;
+end;
+
+procedure TConsultaCNPJ_INTERNO.Memo1Click(Sender: TObject);
+begin
+  HideCaret(Memo1.Handle); // Garantir que o caret não reapareça ao clicar
+end;
+
+procedure TConsultaCNPJ_INTERNO.Memo1Enter(Sender: TObject);
+begin
+  HideCaret(Memo1.Handle); // Oculta o cursor de edição (caret)
+  Memo1.Color := clWhite;
+end;
+
+procedure TConsultaCNPJ_INTERNO.Memo1Exit(Sender: TObject);
+begin
+  ShowCaret(Memo1.Handle); // Restaura o cursor de edição ao sair
+end;
+
+procedure TConsultaCNPJ_INTERNO.Memo1KeyPress(Sender: TObject; var Key: Char);
+begin
+   HideCaret(Memo1.Handle); // Garantir que o caret não reapareça ao digitar
 end;
 
 end.

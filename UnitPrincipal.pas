@@ -226,7 +226,7 @@ end;
 procedure TFormPrincipal.DBCtrlGrid2Click(Sender: TObject);
 begin
     FormCONSULTA := TFormCONSULTA.Create(self);
-    FormCONSULTA.ShowModal;
+    FormCONSULTA.Show;
 end;
 
 procedure TFormPrincipal.BTN_CopiarClick(Sender: TObject);

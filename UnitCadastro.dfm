@@ -39,14 +39,14 @@
       ParentShowHint = False
       ShowHint = False
       object Label2: TLabel
-        Left = 35
+        Left = 420
         Top = 11
         Width = 37
         Height = 15
         Caption = '*ERRO:'
       end
       object Label3: TLabel
-        Left = 420
+        Left = 35
         Top = 11
         Width = 54
         Height = 15
@@ -82,7 +82,7 @@
         Caption = 'ERRO DETALHADO'
       end
       object Panel1: TPanel
-        Left = 24
+        Left = 409
         Top = 55
         Width = 329
         Height = 173
@@ -196,12 +196,12 @@
         end
       end
       object ERRO: TEdit
-        Left = 24
+        Left = 409
         Top = 32
         Width = 329
         Height = 23
         CharCase = ecUpperCase
-        TabOrder = 0
+        TabOrder = 1
         OnKeyDown = ERROKeyDown
         OnKeyPress = AVANÇARCOMENTERKeyPress
       end
@@ -236,10 +236,11 @@
         OnKeyPress = AVANÇARCOMENTERKeyPress
       end
       object SISTEMA: TComboBoxEx
-        Left = 409
+        Left = 25
         Top = 32
         Width = 329
         Height = 24
+        AutoCompleteOptions = [acoAutoAppend, acoUseTab, acoUpDownKeyDropsList]
         ItemsEx = <
           item
           end
@@ -268,7 +269,11 @@
             Caption = 'OTICA'
           end>
         Style = csExDropDownList
-        TabOrder = 1
+        StyleEx = [csExCaseSensitive, csExNoEditImage, csExNoEditImageIndent, csExNoSizeLimit, csExPathWordBreak]
+        Color = clActiveCaption
+        DoubleBufferedMode = dbmRequested
+        ImeMode = imSKata
+        TabOrder = 0
         OnKeyPress = AVANÇARCOMENTERKeyPress
       end
     end
@@ -433,8 +438,8 @@
     object TitleCad: TLabel
       Left = 257
       Top = 12
-      Width = 262
-      Height = 27
+      Width = 257
+      Height = 30
       Alignment = taCenter
       Caption = 'CADASTRO DE ERROS'
       Font.Charset = ANSI_CHARSET

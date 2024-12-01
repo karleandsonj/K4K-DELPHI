@@ -72,11 +72,15 @@ object ConsultaCNPJ_INTERNO: TConsultaCNPJ_INTERNO
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
+      WordWrap = False
+      OnClick = Memo1Click
+      OnEnter = Memo1Enter
+      OnExit = Memo1Exit
+      OnKeyPress = Memo1KeyPress
     end
   end
   object NetHTTPClient1: TNetHTTPClient
     UserAgent = 'Embarcadero URI Client/1.0'
-    Left = 504
-    Top = 416
+    Left = 520
   end
 end

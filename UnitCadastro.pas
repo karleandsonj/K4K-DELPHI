@@ -458,12 +458,35 @@ end;
 
 procedure TFormCadastro.AVANÇARCOMENTERKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then  // Verifica se a tecla pressionada é o Enter
+  if key = #13 then
+  begin
+    // Verifica se já existe um ERRORESUMIDO igual no banco
+    DM.SQLCONSULTA.SQL.Text := 'SELECT ID FROM FORMULARIO WHERE ERRORESUMIDO = :ErroResumido and SISTEMA = :SISTEMA';
+    DM.SQLCONSULTA.ParamByName('ErroResumido').AsString := ERRO.Text;
+    DM.SQLCONSULTA.ParamByName('SISTEMA').AsString := SISTEMA.Text;
+    DM.SQLCONSULTA.Open;
+
+    if not DM.SQLCONSULTA.IsEmpty then
+    begin
+      // Se encontrar um registro com o mesmo ERRORESUMIDO, exibe uma mensagem
+      ShowMessage('ERRORESUMIDO "' + ERRO.Text + '" já cadastrado no sistema "' + SISTEMA.text + '"');
+          CONSULTARERROS;
+      Exit;
+
+    end else if Key = #13 then  // Verifica se a tecla pressionada é o Enter
+    begin
+      Key := #0;  // Anula o Enter para evitar que o TComboBox abra
+      // Avança para o próximo controle
+      SelectNext(Sender as TWinControl, True, True);
+    end;
+  end;
+
+  {if Key = #13 then  // Verifica se a tecla pressionada é o Enter
   begin
     Key := #0;  // Anula o Enter para evitar que o TComboBox abra
     // Avança para o próximo controle
     SelectNext(Sender as TWinControl, True, True);
-  end;
+  end; }
 end;
 
 procedure TFormCadastro.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -481,7 +504,7 @@ begin
   //Formsenhacad := TFormsenhacad.Create(self);
   //Formsenhacad.ShowModal;
       CadPrincipal.PageControl.ActivePageIndex := 0;
-      ERRO.SetFocus;
+      SISTEMA.SetFocus;
       if ID.Text <> '' then
        begin
            DELETAR.Visible := true;
